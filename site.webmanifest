@@ -1,0 +1,14 @@
+{
+    "name": "Ayadori",
+    "short_name": "Ayadori",
+    "icons": [
+        {
+            "src": "/icons/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#b25757",
+    "background_color": "#b25757",
+    "display": "standalone"
+}
