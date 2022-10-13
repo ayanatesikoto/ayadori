@@ -383,6 +383,12 @@ const Top = (props: Props) => {
             <br/>
             ところで、江戸時代の道には、草が生えていたんですね。<br/>
             今ではすっかり舗装された道しか見なくなりました。そんな道しか歩けない現代人の私からすると、草をむしりながら歩いていた佐賀の人が、少し羨ましくもあります。自ら道を作っているようです。<br/>
+            草むしりにあこがれる私に疑問をお持ちですか？ここに詳しい
+            <FunLink onClick={ () => typedDispatch(openResume()) }>
+              <LinkIcon>🔺</LinkIcon>
+              <FunLinkText>経歴</FunLinkText>
+            </FunLink>
+            が書いてあります。
           </Paragraph>
         </PlateB>   
 
