@@ -5,7 +5,11 @@ import type { TypedDispatch, RootState } from '../../../store'
 const directRouteMap = () => {
   return function(typedDispatch: TypedDispatch) {
 
-    const route =  location.pathname
+    let route =  location.pathname
+    const query = window.location.search
+    if (query.startsWith('?p=')) {
+      route = '/' + query.substring(3)
+    }
     
     if (route === '/') {
       replaceState('top', `/`)
