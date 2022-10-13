@@ -13,7 +13,7 @@ dist-ssr
 *.local
 
 # As release to GitHub Pages
-docs
+# docs
 
 # Editor directories and files
 .vscode/*
