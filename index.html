@@ -6,6 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="hsl(0deg 37% 52%)">
     <title>Ayadori</title>
+    <script>
+    // GitHub Pages での SPA アドレス解決用
+    (function(){
+      const query = window.location.search;
+      if (query.startsWith('?p=')) {
+        const route = decodeURIComponent(query.substr(3));
+        window.history.replaceState(null, null, route);
+      }
+    })();
+    </script>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Kaisei+Opti:wght@400;500;700&family=Klee+One:wght@400;600&family=Noto+Emoji:wght@300;700&family=Yomogi&family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap');
 
