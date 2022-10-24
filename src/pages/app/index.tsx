@@ -13,6 +13,7 @@ import Fragments from "../fragments"
 import Skills from "../skills"
 import Resume from "../resume"
 import Blank from "../blank"
+import { MOBILE } from "../../media"
 
 export type View =  'blank' | 'top' | 'resume' | 'skills' | 'portfolio' | 'fragments'
 
@@ -35,7 +36,7 @@ const AppRoot = styled.main`
   width: 100%;
   overflow: hidden;
   box-sizing: border-box;
-  @media (max-width: 479px) {
+  @media ${MOBILE} {
     grid-template-areas: 'Roof'
                          'Content';
     grid-template-rows: 0.2rem calc(100% - 0.2rem);
@@ -100,11 +101,12 @@ const Content = styled.section`
   background-color: white;
   box-sizing: border-box;
   height: 100%;
-  width: 54rem;
+  min-width: 54rem;
   overflow: auto;
   display: flex;
-  @media (max-width: 479px) {
+  @media ${MOBILE} {
     width: 100%; 
+    min-width: auto;
   }
 `
 const Space = styled.div`

@@ -1,0 +1,1 @@
+export const MOBILE = '(width < 479px), (height < 650px)'

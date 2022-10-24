@@ -1,17 +1,19 @@
 import styled, { keyframes } from 'styled-components'
 import pictureOfAya from './assets/aya.png'
 import ayaKid from './assets/ayakid.png'
-import dogAndMe from './assets/dog-and-me.png'
+import dogAndAya from './assets/dog-and-me.png'
 import tree from './assets/tree.png'
 import tigerAndMe from './assets/tiger-and-me.png'
 import komainu from './assets/komainu.png'
 import { openResume, openSkills } from '../router/thunks/pageTransitions'
 import { useTypedDispatch, useTypedSelector } from '../../hooks'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { MOBILE } from '../../media'
 
 type Props = {
   present: boolean,
 }
+
 const BookTitle = styled.h1`
   display: flex;
   flex-direction: column;
@@ -77,7 +79,7 @@ const Paragraph = styled.p`
   padding: 0.6rem;
   box-sizing: border-box;
   max-width: 100%;
-  @media (max-width: 479px) {
+  @media ${MOBILE} {
     font-weight: 600;
     font-size: 1.3ch;
     line-height: 1.7ch;
@@ -92,6 +94,7 @@ const Title = styled.span`
   box-sizing: border-box;
 `
 const Article = styled.article`
+  position: relative;
   flex-basis: 0;
   flex-grow: 1;
   width: 100%;
@@ -102,7 +105,7 @@ const Article = styled.article`
   grid-template-columns: 50% 50%;
   overflow-y: auto;
   overflow-x: hidden;
-  @media (max-width: 479px) {
+  @media ${MOBILE} {
     display: flex;
     flex-wrap: wrap;
     
@@ -121,7 +124,7 @@ const FrontCover = styled.section`
   overflow: hidden;
   background-color: hwb(0deg 34% 30%);
   scroll-snap-align: start;
-  @media (max-width: 479px) {
+  @media ${MOBILE} {
     display: flex;  
   }
 `
@@ -131,7 +134,7 @@ const PlateA = styled.section`
   justify-content: center;
   padding: 0.8rem 0 0.8rem 0.8rem;
 
-  @media (max-width: 479px) {
+  @media ${MOBILE} {
     max-height: 50%;
     min-height: 50%;
     width: 100%;
@@ -147,7 +150,7 @@ const FrameA = styled.section`
   grid-area: frameA;
   position: relative;
 
-  @media (max-width: 479px) {
+  @media ${MOBILE} {
     max-height: 50%;
     min-height: 50%;
     width: 100%;
@@ -166,7 +169,7 @@ const PlateB = styled.section`
   justify-content: end;
   padding: 0.8rem 0 0.8rem 0.8rem;
 
-  @media (max-width: 479px) {
+  @media ${MOBILE} {
     max-height: 50%;
     min-height: 50%;
     width: 100%;
@@ -181,7 +184,7 @@ const FrameB = styled.section`
   grid-area: frameB;
   padding: 1rem;
 
-  @media (max-width: 479px) {
+  @media ${MOBILE} {
     max-height: 50%;
     min-height: 50%;
     width: 100%;
@@ -220,7 +223,8 @@ const PictureOfAya = styled.div`
   height: 100%;
   clip-path: inset(1rem round 1rem);
 `
-const FunLink = styled.span`
+const FunButton = styled.button`
+  all: unset;
   position: relative;
   cursor: pointer;
 `
@@ -238,8 +242,8 @@ const LinkIcon = styled.span`
     color: hsl(29deg 100% 52%);
     font-family: 'Noto Emoji',sans-serif;
     position: absolute;
-    top: -0.3rem;
-    margin-right: -0.618rem;
+    top: -0.62rem;
+    margin-left: 0.918rem;
     font-weight: 700;
     font-size: 0.563rem;
     -webkit-text-stroke-color: hsl(344, 84%, 41%);
@@ -249,7 +253,7 @@ const LinkIcon = styled.span`
     animation-delay: 3s;
     text-orientation: mixed;
 `
-const FunLinkText = styled.a`
+const FunButtonText = styled.a`
     font-family: 'Yomogi',cursive;
     color: hsl(329deg 91% 35%);
     font-size: 0.927rem;
@@ -271,18 +275,6 @@ const AyaKid= styled.div`
   transform-origin: right bottom;
   filter: drop-shadow(1px 1px 2px hsl(0, 0%, 80%));
 `
-const DogAndMe = styled.div`
-  background-image: url(${dogAndMe});
-  background-repeat: no-repeat;
-  background-size: contain;
-  height: 7.95rem;
-  width: 8.61rem; //795x861
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 1.4rem;
-  filter: drop-shadow(1px 1px 2px hsl(0, 0%, 80%));
-`
 const Tree = styled.div`
   background-image: url(${tree});
   background-repeat: no-repeat;
@@ -292,7 +284,6 @@ const Tree = styled.div`
   position: absolute;
   left: 8rem;
   bottom: 0rem;
-  left: 2.4rem;
   transform: rotate(3deg);
   transform-origin: right bottom;
   filter: drop-shadow(1px 1px 2px hsl(0, 0%, 80%));
@@ -310,6 +301,17 @@ const TigerAndMe = styled.div`
   transform-origin: right bottom;
   filter: drop-shadow(1px 1px 2px hsl(0, 0%, 80%));
 `
+const DogAndAya = styled.div`
+  background-image: url(${dogAndAya});
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 7.95rem;
+  width: 8.61rem; //795x861
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  filter: drop-shadow(1px 1px 2px hsl(0, 0%, 80%));
+`
 const Komainu = styled.div`
   background-image: url(${komainu});
   background-repeat: no-repeat;
@@ -317,29 +319,19 @@ const Komainu = styled.div`
   height: 7.46rem;
   width: 8.20rem; //746x820
   position: absolute;
-  right: 10rem;
-  top: 3.5rem;
+  left: 1rem;
+  bottom: 1rem;
   filter: drop-shadow(1px 1px 2px hsl(0, 0%, 80%));
 `
-const AayaRotate = keyframes`
-  0%,100% { 
-    color: hsl(29deg 100% 52%);
-    -webkit-text-stroke-color: hsl(344, 84%, 41%);
-  }
-  50% {
-    color: hsl(50deg 100% 52%);
-    -webkit-text-stroke-color: hsl(50deg 100% 52%);
-  }
-`
+
 const Top = (props: Props) => {
-  
+
   const typedDispatch = useTypedDispatch()
 
   return (
     <TopRoot display={props.present ? 'flex' : 'none'}>
-
+    
       <Article>
-
         <FrontCover>
           <BookTitle>
             <Author>友田彩の</Author>
@@ -355,40 +347,41 @@ const Top = (props: Props) => {
             <br/><br/>
             これは私が小学生の頃、先生から聞かされた、地元の佐賀の人を言い表したものです。<br/>
             <br/>
-            「江戸の終わり頃。
-              佐賀の人は学問のため、節約していた。だから、道の草さえも持っていってしまう。そういった逸話が未だに、県民性を表す言葉として使われているんだ。倹約家で勤勉。だが流石に草さえも、持っていくほど、節約しなくても。という、まあ、融通が効かない人、だという意味だ。」<br/>
+            「江戸の終わり頃。佐賀の人は学問のため、節約していた。だから、道の草さえも持っていってしまう。そういった逸話が未だに、県民性を表す言葉として使われているんだ。倹約家で勤勉。だが流石に草さえも、持っていくほど、節約しなくても。という、まあ、融通が効かない人、だという意味だ。」<br/>
             <br/>
-            先生の言葉だったような気がします。逸話はこうして改変されていくのですね。そんな逸話を聞いて、子供だった私は、欲深い人たちだったんだなあ。草さえも欲しがるなんて。そう思いました。昔の人は節約していた。それを欲深いと思う。少し捻くれた子供です。
+            先生の言葉だったような気がします。逸話は改変こうして改変されていくのですね。そんな逸話を聞いて、
+            だった私は、欲深い人たちだったんだなあ。草さえも欲しがるなんて。そう思いました。昔の人は節約していた。それを欲深いと思う。少し捻くれた子供です。
           </Paragraph>
         </PlateA>
 
         <FrameA>
-          <Komainu/>
+          <Komainu />
           <TigerAndMe/>
           <Tree/>
-          <DogAndMe/>
+          <DogAndAya/>
           <AyaKid/>
         </FrameA>
 
         <PlateB>
           <Paragraph>
             時はたち、今もまだ、変わらない私がいます。<br/>
-            無欲を好む人がいる。好む心もまた、欲である。という、捻くれた私。そんな言葉遊びを、まだ楽しめる。<br/>
-            変わったことと言えば、昔より欲深くなったこと。スマホ、洋服、古文書（？）、そして家の中にあふれてるもの、もの、もの！読書、ペット、イラスト、3Dモデル作成、歴史、
-            <FunLink onClick={ () => typedDispatch(openSkills()) }>
+            県民性に抗うように、いろんなことを求めます。<br/>
+            スマホ、洋服、古文書、ペット、そして家の中にあふれてるもの、もの、もの！読書、イラスト、3Dモデル、史学、
+            <FunButton onClick={ () => typedDispatch(openSkills()) }>
               <LinkIcon>🔺</LinkIcon>
-              <FunLinkText>プログラミング</FunLinkText>
-            </FunLink>
+              <FunButtonText>プログラミング</FunButtonText>
+            </FunButton>
             。色々なことへの興味もつきません。<br/>
+            それでもゲームを１つ買うのにも、何ヶ月も検討してしまうくらいケチなところも変わらない。きっと私は、変えたくないのでしょう。<br/>
+            佐賀には、有史以前からの歴史の面影が残っています。古い言葉も地名も残っています。幕末は二重鎖国といって、他藩との交流を断つほど保守的でもありました。草も生えぬ。きっと、そんな言い草も、良い草として残してしまうくらい、地元の文化に誇りを持っているのだと思います。<br/>
             <br/>
-            ところで、江戸時代の道には、草が生えていたんですね。<br/>
-            今ではすっかり舗装された道しか見なくなりました。そんな道しか歩けない現代人の私からすると、草をむしりながら歩いていた佐賀の人が、少し羨ましくもあります。自ら道を作っているようです。<br/>
-            草むしりにあこがれる私に疑問をお持ちですか？ここに詳しい
-            <FunLink onClick={ () => typedDispatch(openResume()) }>
+            佐賀県には興味がなくとも、私には興味があったりしませんか？<br/>
+            ここに詳しい
+            <FunButton onClick={ () => typedDispatch(openResume()) }>
               <LinkIcon>🔺</LinkIcon>
-              <FunLinkText>経歴</FunLinkText>
-            </FunLink>
-            が書いてあります。
+              <FunButtonText>経歴</FunButtonText>
+            </FunButton>
+            が書いてあります。<br/>
           </Paragraph>
         </PlateB>   
 

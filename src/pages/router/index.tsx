@@ -25,8 +25,6 @@ const Router = () => {
 
   useEffect(() => {
     window.onpopstate = function(event) {
-
-      console.log(event.state)
       
       if (event.state && event.state.popName === 'top') {
         typedDispatch(turnTop())
