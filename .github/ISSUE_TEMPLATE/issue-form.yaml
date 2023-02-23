@@ -17,14 +17,14 @@ body:
       placeholder: ex. email@example.com
     validations:
       required: false
-  - type: ace_mode
+  - type: textarea
     id: what-happened
     attributes:
       label: What happened?
       description: Also tell us, what did you expect to happen?
       placeholder: Tell us what you see!
       value: "A bug happened!"
-      render: markup
+      render: ace_mode
     validations:
       required: true
   - type: dropdown
