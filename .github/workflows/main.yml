@@ -3,3 +3,12 @@ on:
     types:
       - opened
       
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Download artifact'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            console.log('hello')
